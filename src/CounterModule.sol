@@ -26,11 +26,18 @@ contract CounterModule is Module {
     }
 
     // Callback and Fallback Functions
+
+    // Fallback Functions
     function getStep() external view returns (uint256) {
-        return CounterStorage.data().step;
+        return _counterStorage().step;
     }
 
     function setStep(uint256 _step) external {
-        CounterStorage.data().step = _step;
+        _counterStorage().step = _step;
+    }
+
+    // Callback Functions
+    function beforeIncrement(uint256 count) external view returns (uint256) {
+        return count + _counterStorage().step;
     }
 }
