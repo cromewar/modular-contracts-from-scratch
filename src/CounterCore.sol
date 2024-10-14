@@ -22,7 +22,21 @@ contract CounterCore is Core {
         pure
         override
         returns (SupportedCallbackFunction[] memory supportedCallbackFunctions)
-    {}
+    {
+        supportedCallbackFunctions = new SupportedCallbackFunction[](1);
+        supportedCallbackFunctions[0] = SupportedCallbackFunction({
+            selector: BeforeIncrementCallback.beforeIncrement.selector,
+            mode: CallbackMode.REQUIRED
+        });
+    }
+
+    // Declaring the supported interfaces
+
+    function supportsInterface(
+        bytes4 interfaceId
+    ) public view override returns (bool) {
+        interfaceId == 0x00000001 || super.supportsInterface(interfaceId);
+    }
 
     // Contract function
 
