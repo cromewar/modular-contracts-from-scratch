@@ -40,4 +40,17 @@ contract CounterModule is Module {
     function beforeIncrement(uint256 count) external view returns (uint256) {
         return count + _counterStorage().step;
     }
+
+    // Install and Uninstall Functions
+
+    function onInstall(bytes calldata data) external {
+        uint256 step = abi.decode(data, (uint256));
+        _counterStorage().step = step;
+    }
+
+    function onUninstall(bytes calldata data) external {}
+
+    function encodeBytesOnUninstall() external pure returns (bytes memory) {
+        return "";
+    }
 }
