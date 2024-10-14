@@ -3,6 +3,7 @@
 pragma solidity ^0.8.20;
 
 import {Module} from "@thirdweb-dev/src/Module.sol";
+import {Role} from "@thirdweb-dev/src/Role.sol";
 import {CounterStorage} from "./library/CounterStorage.sol";
 
 contract CounterModule is Module {
@@ -12,7 +13,34 @@ contract CounterModule is Module {
         pure
         override
         returns (ModuleConfig memory config)
-    {}
+    {
+        // Callback Function array of one element
+        config.callbackFunctions = new CallbackFunction[](1);
+        // Fallback Function array of two elements
+        config.fallbackFunctions = new FallbackFunction[](2);
+
+        //adding the functions to the arrays
+        config.callbackFunctions[0] = CallbackFunction(
+            this.beforeIncrement.selector
+        );
+
+        config.fallbackFunctions[0] = FallbackFunction({
+            selector: this.getStep.selector,
+            permissionBits: 0
+        });
+
+        config.fallbackFunctions[1] = FallbackFunction({
+            selector: this.setStep.selector,
+            permissionBits: Role._MANAGER_ROLE
+        });
+
+        // Required interfaces for the Module
+        config.requiredInterfaces = new bytes4[](1);
+        config.requiredInterfaces[0] = 0x00000001;
+
+        // register the intallation callback
+        config.registerInstallationCallback = true;
+    }
 
     // Contract Function
 
