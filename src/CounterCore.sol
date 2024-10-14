@@ -32,6 +32,7 @@ contract CounterCore is Core {
 
     // Declaring the supported interfaces
 
+    // for this particular interface the correct ID would actually be: 0xd40a8f2d
     function supportsInterface(
         bytes4 interfaceId
     ) public view override returns (bool) {
